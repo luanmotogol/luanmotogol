@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financiamento</title>
+
+
+    <style>
+
+      
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1f1f1f;
+        }
+
+        .container {
+            font-size: 2.5vh;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            color: rgb(255, 255, 255);
+            
+        }
+
+        .input-group {
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 3px;
+            margin-bottom: 10px;
+            border: 1px solid #ffffff;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            position: absolute;
+            background-color: #c70000;
+            color: white;
+            padding: 15px 15px;
+            width: 13vh;
+            left: 16vh;
+            top: 55vh;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #410000;
+        }
+
+        #resultado span {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        #valorEntradaMaiorDiv {
+            display: none;
+        }
+
+        #parcelasLabel {
+    display: block;
+    position: absolute;
+    background-color: rgb(150, 0, 0);
+    padding: 1vh;
+    width: 49vh;
+    font-size: 3vh;
+    left: -1vh;
+    top: 76.6vh;
+    font-weight: bold;
+    color: #ffffff;
+    line-height: 4vh; /* Ajuste para centralizar verticalmente */
+    text-align: center; /* Centralizar horizontalmente */
+}
+
+#resultado{
+    flex-direction: column;
+    position: absolute;
+    top: 82.6vh;
+    left: 1vh;
+    font-size: 3vh;
+    width: 49vh;
+    height: 21vh;
+    background-color: #131313;
+    color: white;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+       #numeroParcelasSelecionado{
+        position: absolute;
+        background-color: #160000;
+        top: 76.7vh;
+        left: 0vh;
+        font-size: 3vh;
+        z-index: 1;
+        padding:1.2vh;
+       }
+       h2{
+        background-color: #131313;
+        padding:2vh;
+       margin-top: -3vh;
+       margin-left: -3vh;
+       margin-right: -3vh;
+       font-size: 3.20vh;
+       text-align: center
+       ;
+        
+       }
+       img{
+        width: 5vh;
+        height: 5vh;
+        position: absolute;
+        left: 1vh;
+        top: 0.8vh;
+       }
+    </style>
+</head>
+<body>
+  
+<img src="honda.png" alt="Logo da Honda">
+
+    <div class="container">
+        <h2>Financiamento Honda</h2>
+        <form id="calculadora">
+            <div class="input-group">
+                <label for="valorMoto">Valor Total da Moto:</label>
+                <label for="valorMoto">R$</label>
+                <input type="number" id="valorMoto" name="valorMoto" required>
+            </div>
+            <div class="input-group">
+                <label for="entrada">Porcentagem da Entrada:</label>
+                <input type="number" id="entrada" name="entrada" min="0" max="100" step="1" value="20" required>
+                <span>%</span>
+            </div>
+            <div class="input-group">
+                <label for="entradaMaior">Entrada Maior:</label>
+                <select id="entradaMaior" name="entradaMaior">
+                    <option value="nao">Não</option>
+                    <option value="sim">Sim</option>
+                </select>
+            </div>
+            <div class="input-group" id="valorEntradaMaiorDiv">
+                <label for="valorEntradaMaior">Valor da Entrada Maior:</label>
+                <label for="valorEntradaMaior">R$</label>
+                <input type="number" id="valorEntradaMaior" name="valorEntradaMaior" required>
+            </div>
+            <div class="input-group">
+                <label for="parcelas">Número de Parcelas:</label>
+                <select id="parcelas" name="parcelas">
+                    <option value="1.523">12</option>
+                    <option value="0.060">24</option>
+                    <option value="0.047">36</option>
+                    <option value="0.039">48</option>
+                </select>
+            </div>
+            <span id="numeroParcelasSelecionado">12</span>
+            
+        </form>
+
+        <div id="resultado">
+            <span id="valorEntrada">Entrada: R$ 0</span>
+            <span id="valorRestante">Valor à Financiar: R$ 0</span>
+            <span>Taxa de Abertura de Crédito: R$ 900,00</span>
+            
+        </div>
+        <span id="parcelasLabel">Parcelas: R$ 0</span>
+    </div>
+
+    <script>
+  var selectParcelas = document.getElementById('parcelas');
+var numeroParcelasSelecionado = document.getElementById('numeroParcelasSelecionado');
+
+selectParcelas.addEventListener('change', function() {
+    var parcelasSelecionadas = selectParcelas.options[selectParcelas.selectedIndex].text;
+    numeroParcelasSelecionado.textContent = parcelasSelecionadas;
+});
+
+
+
+
+
+        document.getElementById('calculadora').addEventListener('input', function(event) {
+            var valorMoto = parseFloat(document.getElementById('valorMoto').value);
+            var entradaPorcentagem = parseFloat(document.getElementById('entrada').value);
+            var entradaMaior = document.getElementById('entradaMaior').value;
+            var valorEntradaMaior = parseFloat(document.getElementById('valorEntradaMaior').value);
+            var parcelas = parseFloat(document.getElementById('parcelas').value);
+            var valorTAC = 900;
+
+            var valorEntrada = (valorMoto * entradaPorcentagem / 100).toFixed(2);
+            var valorEntradaFinal = (entradaMaior === 'sim') ? valorEntradaMaior : valorEntrada;
+            var valorRestante = (valorMoto - valorEntradaFinal + valorTAC).toFixed(2);
+
+            document.getElementById('valorEntrada').textContent = 'Valor da Entrada: R$ ' + valorEntradaFinal;
+            document.getElementById('valorRestante').textContent = 'Valor Restante: R$ ' + valorRestante;
+
+            var valorParcelas = (valorRestante * parcelas).toFixed(2);
+            if (parcelas == 1.523) { // Se selecionado o valor correspondente a 12 parcelas
+                valorParcelas = (valorParcelas / 12).toFixed(2);
+            }
+
+            document.getElementById('parcelasLabel').textContent = 'Parcelas: R$ ' + valorParcelas;
+
+            // Exibir ou ocultar a entrada para o valor da entrada maior
+            if (entradaMaior === 'sim') {
+                document.getElementById('valorEntradaMaiorDiv').style.display = 'block';
+            } else {
+                document.getElementById('valorEntradaMaiorDiv').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
