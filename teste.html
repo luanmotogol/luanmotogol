@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formatador de Moeda</title>
+</head>
+<body>
+
+<label for="valor">Digite um valor:</label>
+<input type="text" id="valor" oninput="formatarMoeda(this)">
+<br><br>
+
+<script>
+function formatarMoeda(input) {
+    // Obtém o valor atual do campo de entrada
+    var valor = input.value;
+
+    // Remove todos os caracteres que não são dígitos
+    valor = valor.replace(/\D/g, '');
+
+    // Formata para o formato de moeda (R$ XX,XX)
+    valor = (parseInt(valor) / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+    // Define o valor formatado de volta para o campo de entrada
+    input.value = valor;
+}
+</script>
+
+</body>
+</html>
